@@ -4,6 +4,9 @@
 
 package dev.atakku.fsmp.spawner;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
@@ -16,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import javax.imageio.ImageIO;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class SpawnCache {
@@ -74,15 +78,21 @@ public class SpawnCache {
   }
 
   private static void populate(ObjectArrayList<SpawnData> avail, int step) {
-    for (int x = -6144; x <= 6144; x += 1536 / step) {
-      for (int z = -6144; z <= 6144; z += 1536 / step) {
-        if (Math.sqrt(x * x + z * z) <= 6144) {
-          SpawnData data = new SpawnData();
-          data.spawnX = x;
-          data.spawnZ = z;
-          avail.add(data);
+    try {
+      BufferedImage img = ImageIO.read(new File("map.png"));
+      Spawner.LOGGER.info("Loaded sample map");
+      for (int x = -8192; x <= 8192; x += 2048 / step) {
+        for (int z = -8192; z <= 8192; z += 2048 / step) {
+          if ((img.getRGB(x%4, z/4) & 0x000000ff) >= 200) {
+            SpawnData data = new SpawnData();
+            data.spawnX = x;
+            data.spawnZ = z;
+            avail.add(data);
+          }
         }
       }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
