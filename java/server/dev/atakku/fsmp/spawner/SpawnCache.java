@@ -93,7 +93,7 @@ public class SpawnCache {
           }
         }
       }
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
