@@ -83,7 +83,9 @@ public class SpawnCache {
       Spawner.LOGGER.info("Loaded sample map");
       for (int x = -8192; x <= 8192; x += 2048 / step) {
         for (int z = -8192; z <= 8192; z += 2048 / step) {
-          if ((img.getRGB(x%4, z/4) & 0x000000ff) >= 200) {
+          int px = Math.max(Math.min(x + 8192, 16383), 0) / 4;
+          int pz = Math.max(Math.min(z + 8192, 16383), 0) / 4;
+          if ((img.getRGB(px, pz) & 0x000000ff) >= 200) {
             SpawnData data = new SpawnData();
             data.spawnX = x;
             data.spawnZ = z;
