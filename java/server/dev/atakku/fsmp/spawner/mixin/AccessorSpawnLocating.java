@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(SpawnLocating.class)
 public interface AccessorSpawnLocating {
-  @Invoker
+  @Invoker("findOverworldSpawn")
   public static BlockPos invokeFindOverworldSpawn(ServerWorld world, int x, int z) {
     throw new AssertionError();
   }
