@@ -16,7 +16,7 @@ import dev.atakku.fsmp.spawner.SpawnCache;
 @Mixin(ServerPlayerEntity.class)
 public class MixinServerPlayerEntity {
   @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getSpawnPos()Lnet/minecraft/util/math/BlockPos;"), method = "moveToSpawn")
-  public BlockPos getSpawnData(ServerWorld instance) {
-    return SpawnCache.getSpawnData(((ServerPlayerEntity)(Object) this).getUuid()).toBlockPos();
+  public BlockPos getSpawnData(ServerWorld world) {
+    return SpawnCache.getSpawnData(world, ((ServerPlayerEntity)(Object) this).getUuid()).toBlockPos();
   }
 }

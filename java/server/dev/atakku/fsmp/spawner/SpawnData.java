@@ -18,10 +18,15 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class SpawnData {
-  public int spawnX, spawnZ = 0;
+  public int x, z;
+  
+  public SpawnData(int x, int z) {
+    this.x = x;
+    this.z = z;
+  }
 
   public final BlockPos toBlockPos() {
-    return new BlockPos(spawnX, 128, spawnZ);
+    return new BlockPos(x, 128, z);
   }
 
   public static final class Serde implements JsonSerializer<SpawnData>, JsonDeserializer<SpawnData> {
@@ -29,17 +34,16 @@ public class SpawnData {
     public SpawnData deserialize(JsonElement json, Type t, JsonDeserializationContext ctx)
         throws JsonParseException {
       JsonObject obj = json.getAsJsonObject();
-      SpawnData self = new SpawnData();
-      self.spawnX = JsonHelper.getInt(obj, "spawnX", 0);
-      self.spawnZ = JsonHelper.getInt(obj, "spawnZ", 0);
-      return self;
+      int x = JsonHelper.getInt(obj, "x", JsonHelper.getInt(obj, "spawnX", 0));
+      int z = JsonHelper.getInt(obj, "z", JsonHelper.getInt(obj, "spawnZ", 0));
+      return new SpawnData(x, z);
     }
 
     @Override
     public JsonElement serialize(SpawnData self, Type t, JsonSerializationContext ctx) {
       JsonObject json = new JsonObject();
-      json.addProperty("spawnX", self.spawnX);
-      json.addProperty("spawnZ", self.spawnZ);
+      json.addProperty("x", self.x);
+      json.addProperty("z", self.z);
       return json;
     }
   }
@@ -47,7 +51,7 @@ public class SpawnData {
   @Override
   public boolean equals(Object object) {
     if (object instanceof SpawnData other) {
-      return this.spawnX == other.spawnX && this.spawnZ == other.spawnZ;
+      return this.x == other.x && this.z == other.z;
     }
     return false;
   }
